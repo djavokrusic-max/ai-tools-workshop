@@ -8,7 +8,7 @@ import sys
 import os
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.dml.color import RgbColor
+from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 import uuid
 
@@ -25,22 +25,22 @@ def generate_ppt(outline: str, page_count: int, style: str, output_path: str):
     # 风格配置
     style_configs = {
         '简约': {
-            'bg_color': RgbColor(255, 255, 255),
-            'title_color': RgbColor(0, 0, 0),
-            'content_color': RgbColor(50, 50, 50),
-            'accent_color': RgbColor(100, 100, 100),
+            'bg_color': RGBColor(255, 255, 255),
+            'title_color': RGBColor(0, 0, 0),
+            'content_color': RGBColor(50, 50, 50),
+            'accent_color': RGBColor(100, 100, 100),
         },
         '商务': {
-            'bg_color': RgbColor(25, 55, 95),
-            'title_color': RgbColor(255, 255, 255),
-            'content_color': RgbColor(220, 220, 220),
-            'accent_color': RgbColor(70, 130, 180),
+            'bg_color': RGBColor(25, 55, 95),
+            'title_color': RGBColor(255, 255, 255),
+            'content_color': RGBColor(220, 220, 220),
+            'accent_color': RGBColor(70, 130, 180),
         },
         '活泼': {
-            'bg_color': RgbColor(255, 245, 230),
-            'title_color': RgbColor(255, 100, 50),
-            'content_color': RgbColor(50, 50, 50),
-            'accent_color': RgbColor(255, 180, 100),
+            'bg_color': RGBColor(255, 245, 230),
+            'title_color': RGBColor(255, 100, 50),
+            'content_color': RGBColor(50, 50, 50),
+            'accent_color': RGBColor(255, 180, 100),
         }
     }
     

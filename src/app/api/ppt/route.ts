@@ -84,8 +84,8 @@ export async function POST(request: NextRequest) {
       fs.mkdirSync(pptDir, { recursive: true });
     }
     
-    // 调用 Python 脚本生成 PPT
-    const pythonCmd = `python3 "${scriptPath}" "${outline.replace(/"/g, '\\"')}" ${pageNum} "${styleName}" "${publicPath}"`;
+    // 调用 Python 脚本生成 PPT (Windows: python, Linux: python3)
+    const pythonCmd = `python "${scriptPath}" "${outline.replace(/"/g, '\\"')}" ${pageNum} "${styleName}" "${publicPath}"`;
     
     let result;
     try {
