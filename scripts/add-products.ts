@@ -49,6 +49,17 @@ async function addProducts() {
       category: "工具",
       icon: "💬",
       status: "developing"
+    },
+    {
+      id: "5",
+      title: "MoClawny帮你做PPT",
+      description: "输入大纲，AI帮你生成专业PPT。支持多种风格，每日免费3次。",
+      price: 0,
+      downloads: 0,
+      category: "办公",
+      icon: "📊",
+      status: "completed",
+      link: "/ppt"
     }
   ];
   

@@ -49,5 +49,14 @@ export async function POST(request: NextRequest) {
   
   // 返回用户信息（不返回密码）
   const { password: _, ...userWithoutPassword } = newUser;
-  return NextResponse.json({ success: true, message: '注册成功', user: userWithoutPassword });
+  
+  // 创建响应并设置 cookie
+  const response = NextResponse.json({ success: true, message: '注册成功', user: userWithoutPassword });
+  response.cookies.set('user', JSON.stringify(userWithoutPassword), {
+    httpOnly: false,
+    maxAge: 60 * 60 * 24 * 7, // 7天
+    path: '/',
+  });
+  
+  return response;
 }

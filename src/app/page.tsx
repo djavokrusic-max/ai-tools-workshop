@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getStats } from "@/lib/data";
+import AuthCheck from "@/components/AuthCheck";
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +9,8 @@ export default async function Home() {
 
   return (
     <div>
+      <AuthCheck />
+      
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-white to-blue-50 py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(120,100,255,0.1),transparent_50%)]" />

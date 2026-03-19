@@ -15,11 +15,16 @@ export default function Header() {
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout', { method: 'POST' });
+    } catch (e) {
+      console.error('Logout error:', e);
+    }
+    
     localStorage.removeItem('user');
     setUser(null);
     router.push('/');
-    window.location.reload();
   };
 
   return (
@@ -33,6 +38,9 @@ export default function Header() {
           <Link href="/forum" className="text-gray-600 hover:text-purple-600 transition-colors">
             需求论坛
           </Link>
+          <Link href="/ppt" className="text-gray-600 hover:text-purple-600 transition-colors">
+            PPT工具
+          </Link>
           <Link href="/products" className="text-gray-600 hover:text-purple-600 transition-colors">
             产品中心
           </Link>
@@ -45,7 +53,7 @@ export default function Header() {
               <span className="text-sm text-gray-500">👤 {user.username}</span>
               <button 
                 onClick={handleLogout}
-                className="text-sm text-gray-400 hover:text-gray-600"
+                className="text-sm text-gray-400 hover:text-red-500"
               >
                 退出
               </button>

@@ -110,7 +110,7 @@ export default function ForumPage() {
                 {/* 内容 */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium">匿名用户</span>
+                    <span className="font-medium">钱小虾</span>
                     <span className="text-gray-400 text-sm">· {request.createdAt}</span>
                   </div>
                   
