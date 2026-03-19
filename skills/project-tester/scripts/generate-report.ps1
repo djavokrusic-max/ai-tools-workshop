@@ -1,4 +1,4 @@
-# Test Report Generator
+# Test Report Generator - Simplified
 # 从测试结果生成 Markdown 报告
 
 param(
@@ -30,8 +30,8 @@ $passed = ($apiResults | Where-Object { $_.Status -eq "PASS" }).Count
 $failed = ($apiResults | Where-Object { $_.Status -eq "FAIL" }).Count
 $passRate = if ($total -gt 0) { [math]::Round(($passed / $total) * 100, 1) } else { 0 }
 
-# 生成报告
-$report = @"
+# 生成报告内容
+$reportContent = @"
 # 测试报告
 
 **项目**: AI Tools Workshop (MoClawny)
@@ -40,7 +40,7 @@ $report = @"
 
 ---
 
-## 📊 测试摘要
+## 测试摘要
 
 | 类型 | 通过 | 失败 | 总数 | 通过率 |
 |------|------|------|------|--------|
@@ -48,142 +48,57 @@ $report = @"
 
 ---
 
-## 🔵 API 测试结果
-
-"@
-
-if ($apiResults.Count -gt 0) {
-    $report += @"
+## API 测试结果
 
 ### 端点测试
 
 | # | 端点 | 方法 | 状态 | 状态码 | 耗时 |
 |---|------|------|------|--------|------|
 "@
+
+$i = 1
+foreach ($result in $apiResults) {
+    $statusText = if ($result.Status -eq "PASS") { "PASS" } else { "FAIL" }
+    $reportContent += "`n| $i | $($result.Endpoint) | $($result.Method) | $statusText | $($result.StatusCode) | $($result.Duration)ms |"
     
-    $i = 1
-    foreach ($result in $apiResults) {
-        $statusIcon = if ($result.Status -eq "PASS") { "✅ PASS" } else { "❌ FAIL" }
-        $report += @"
-| $i | $($result.Endpoint) | $($result.Method) | $statusIcon | $($result.StatusCode) | $($result.Duration)ms |
-"@
-        
-        if ($result.Status -eq "FAIL") {
-            $report += @"
-
-> **失败详情**: $($result.Name)
-> 错误信息: $($result.Error)
-
-"@
-        }
-        
-        $i++
+    if ($result.Status -eq "FAIL") {
+        $reportContent += "`n|> **失败详情**: $($result.Error)"
     }
-} else {
-    $report += @"
-
-*暂无 API 测试数据*
-"@
+    $i++
 }
 
-$report += @"
+$reportContent += @"
 
 ---
 
-## 📝 测试日志
+## 测试日志
 
 ```
 测试开始时间: $Time
 测试环境: http://localhost:3000
 ```
 
-"@
-
-# E2E 测试结果占位符
-$report += @"
-
-## 🟢 E2E 测试结果
-
-*E2E 测试结果需要手动运行 Playwright 后添加*
-
-运行命令:
-```bash
-npx playwright test --reporter=line
-```
-
-"@
-
-# 结论
-$report += @"
-
 ---
 
-## 🎯 结论与建议
+## 结论
 
-### 测试通过项
-"@
-
-if ($passed -eq $total) {
-    $report += @"
-- ✅ 所有 API 端点响应正常 ($total/$total)
-"@
-} else {
-    $report += @"
-- ⚠️ 部分 API 端点存在问题 ($passed/$total 通过)
-"@
-}
-
-$report += @"
-
-### 需要修复的问题
-"@
-
-if ($failed -gt 0) {
-    foreach ($result in $apiResults) {
-        if ($result.Status -eq "FAIL") {
-            $report += @"
-- ❌ $($result.Name): $($result.Error)
-"@
-        }
-    }
-} else {
-    $report += @"
-- 无
-"@
-}
-
-$report += @"
-
-### 优化建议
-1. 定期运行测试确保功能稳定
-2. 添加更多边界条件测试
-3. 考虑添加性能测试
-
----
-
-## 📚 相关资源
-
-- [Playwright 文档](https://playwright.dev/docs/intro)
-- [Next.js Testing](https://nextjs.org/docs/testing)
+- API 测试通过率: $passRate%
+- 失败测试数: $failed
 
 ---
 
 *报告生成时间: $Time*
-*使用 MoClawny Project Tester 生成 🦞*
+*使用 MoClawny Project Tester 生成*
 "@
 
 # 写入文件
-$report | Out-File -FilePath $OutputFile -Encoding UTF8
+$reportContent | Out-File -FilePath $OutputFile -Encoding UTF8
 
+Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  测试报告已生成!" -ForegroundColor Cyan
+Write-Host "  Test Report Generated!" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "报告文件: $OutputFile" -ForegroundColor Yellow
-Write-Host "API通过率: $passRate% ($passed/$total)" -ForegroundColor $(if ($passRate -ge 80) { "Green" } else { "Yellow" })
+Write-Host "Report file: $OutputFile" -ForegroundColor Yellow
+Write-Host "API Pass Rate: $passRate% ($passed/$total)" -ForegroundColor Green
 Write-Host ""
-
-# 打开报告文件
-if (Test-Path $OutputFile) {
-    Write-Host "是否打开报告? (Y/N)" -ForegroundColor Cyan
-}

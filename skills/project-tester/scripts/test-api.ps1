@@ -106,7 +106,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 
 $Report | ForEach-Object {
     $statusColor = if ($_.Status -eq "PASS") { "Green" } else { "Red" }
-    $statusIcon = if ($_.Status -eq "PASS") { "✅" } else { "❌" }
+    $statusIcon = if ($_.Status -eq "PASS") { "[PASS]" } else { "[FAIL]" }
     
     Write-Host ""
     Write-Host "$statusIcon $($_.Name)" -ForegroundColor $statusColor
