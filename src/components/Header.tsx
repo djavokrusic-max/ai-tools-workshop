@@ -9,9 +9,25 @@ export default function Header() {
   const router = useRouter();
 
   useEffect(() => {
+    // 检查 localStorage
     const userData = localStorage.getItem('user');
     if (userData) {
       setUser(JSON.parse(userData));
+      return;
+    }
+    
+    // 检查 cookies
+    const cookies = document.cookie.split(';');
+    const userCookie = cookies.find(c => c.trim().startsWith('user='));
+    if (userCookie) {
+      try {
+        const userDataFromCookie = JSON.parse(decodeURIComponent(userCookie.value.split('=')[1]));
+        setUser(userDataFromCookie);
+        // 同时写入 localStorage 以便后续使用
+        localStorage.setItem('user', userCookie.value.split('=')[1]);
+      } catch (e) {
+        console.error('Parse user cookie error:', e);
+      }
     }
   }, []);
 
